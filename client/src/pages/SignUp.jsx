@@ -93,7 +93,7 @@ import {useState} from "react"
           <div className='flex gap-2 text-sm mt-5'>  
             <span>Have an account?</span>
           
-            <Link  to='signin' className='text-blue-500'>Sign In</Link>
+            <Link  to='/signin' className='text-blue-500'>Sign In</Link>
             </div>
              {errorMessage && (
             <Alert className='mt-5' color='failure'>
