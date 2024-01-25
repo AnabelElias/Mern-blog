@@ -4,6 +4,7 @@ import {useState} from "react"
 import { signInStart,signInSuccess,signInFailure
  } from '../redux/user/userSlice';
  import { useDispatch,useSelector } from 'react-redux';
+import OAuth from '../components/OAuth';
 
  const Signin = () => {
   const [formData,setFormData]=useState({})
@@ -89,6 +90,7 @@ import { signInStart,signInSuccess,signInFailure
               )}
               
               </Button>
+              <OAuth/>
           </form>
           <div className='flex gap-2 text-sm mt-5'>  
             <span>If you are new?</span>

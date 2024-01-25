@@ -38,7 +38,7 @@ try {
    }
 
    const token = jwt.sign(
-      { id: user._id },
+      { id: user._id,isAdmin:user.isAdmin },
       process.env.SECRET_KEY
     );
     user.password=undefined
@@ -46,4 +46,38 @@ try {
 } catch (error) {
    next(error)
 }
+}
+
+//signin with google
+export const google = async(req,res,next)=>{
+   const {email,name,googlePhotoUrl}=req.body;
+   try {
+      const user=await User.findOne({email})
+      if(user){
+         const token=jwt.sign({id:user._id,isAdmin:user.isAdmin},process.env.SECRET_KEY)
+         user.password=undefined;
+         res.status(200).cookie('access_token',token,{
+            httpOnly:true
+         }).json(user)
+      }else{
+         const generatedPassword=Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+         const hashedPassword=await bcrypt.hash(generatedPassword,10)
+         const newUser= await User.create({
+            username:name.toLowerCase().split('').join('') + Math.random().toString(9).slice(-4),
+            email,
+            password:hashedPassword,
+           profilePicture: googlePhotoUrl
+         
+         });
+         const token=jwt.sign({id:newUser._id,isAdmin:newUser.isAdmin},process.env.SECRET_KEY)
+         newUser.password=undefined;
+         res.status(200).cookie('access_token',token,{
+            httpOnly:true
+         }).json(newUser)
+         }
+
+      
+   } catch (error) {
+      next(error)
+   }
 }
